@@ -1,9 +1,9 @@
-# Penguin Alert
-![Penguin](static/img/penguin.png)
+# NewsPy
 
-#### An API returning Youtube transcripts on videos released by BBC Earth, BBC, and National Geograpic (possibly more to come)
+#### An to collect and aggregate youtube statistics on the top news networks (CNN, MSNBC, Fox News, etc.)
 
 #### Uses
+Youtube API
 Flask
 Python
 

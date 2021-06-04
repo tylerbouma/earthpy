@@ -7,7 +7,7 @@ youtube = build('youtube', 'v3', developerKey=api_key)
  
 def get_channel_videos(channel_id):
  
-    # get Uploads playlist id
+    # get youtube channel statistics
     res = youtube.channels().list(id=channel_id,
                                   part='contentDetails').execute()
     playlist_id = res['items'][0]['contentDetails']['relatedPlaylists']['uploads']
@@ -33,13 +33,18 @@ video_ids = []  # list of all video_id of channel
 for video in videos:
     video_ids.append(video['snippet']['resourceId']['videoId'])
  
+counter = 0
 for video_id in video_ids:
     try:
         responses = YouTubeTranscriptApi.get_transcript(
             video_id, languages=['en'])
         print('\n'+"Video: "+"https://www.youtube.com/watch?v="+str(video_id)+'\n'+'\n'+"Captions:")
+        file_obj = open("Test"+str(counter)+".txt", "a")
         for response in responses:
             text = response['text']
-            # Write transcripts out for each video to a 
+            # Write transcripts out for each video to a file
+            file_obj.write(text+str("\n"))
+        file_obj.close()
+        counter += 1
     except Exception as e:
 	    print(e)

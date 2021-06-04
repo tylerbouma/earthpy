@@ -1,9 +1,9 @@
-# NewsPy
+# Earthpy
 
-#### An to collect and aggregate youtube statistics on the top news networks (CNN, MSNBC, Fox News, etc.)
+#### Data Pipeline that collects Youtube Transcripts for videos released by BBC Earth
 
 #### Uses
-Youtube API
+Youtube Transcripts API
 Flask
 Python
 

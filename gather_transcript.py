@@ -30,26 +30,26 @@ def get_channel_videos(channel_id):
     return videos
  
 videos = get_channel_videos(channel_id)
-video_ids = []  # list of all video_id of channel
+video_dict = []  # dict of all video_id:title pairs of the channel
  
 for video in videos:
-    video_ids.append(video['snippet']['resourceId']['videoId'])
+    video_dict.append({video['snippet']['resourceId']['videoId']:video['snippet']['title']})
  
 counter = 0
-for video_id in video_ids:
+for video in video_dict:
     try:
-        responses = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
-        vid = youtube.videos().list(id=video_id, 
-                                    part='snippet').execute()
+        responses = YouTubeTranscriptApi.get_transcript(video[0], languages=['en'])
+        #vid = youtube.videos().list(id=video[0], 
+        #                            part='snippet').execute()
 
         # use the video_id to find the video title
-        vid_title = vid['items'][0]['snippet']['title']    
-        vid_link = "Video: "+"https://www.youtube.com/watch?v="+str(video_id)+'\n'+'\n'
+        vid_title = "Title: "+video[1]+str("\n")  
+        vid_link = "Video: "+"https://www.youtube.com/watch?v="+str(video[0])+'\n'+'\n'
         
         # open a text file for each video and write the title, link, and transcript out
-        file_obj = open(r"BBCE_transcripts/" + str(video_id) + str(counter)+".txt", "a")
-        file_obj.write("Title: " + vid_title + str("\n"))
-        file_obj.write(vid_link + str("\n"))
+        file_obj = open(r"BBCE_transcripts/" + str(video[0]) + str(counter)+".txt", "a")
+        file_obj.write(vid_title)
+        file_obj.write(vid_link)
         for response in responses:
             text = response['text']
             # Write transcripts out

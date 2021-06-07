@@ -2,6 +2,7 @@ from pymongo import MongoClient, errors
 # pickle will serialize the dictionary
 import pickle
 import time, json
+import os
 
 start_time = time.time()
 
@@ -12,13 +13,11 @@ def get_video_transcript(filename):
         data = data.decode("utf-8", errors='ignore')
 
         # split the transcript file into list
-        # first line is always the title
-        # second line is always the video link
-        # every line after is transcript data
         data = data.split("\n")
 
         # create an empty Python dict for the entries
         dict_data = {'title': [], 'vidlink': [], 'text': []}
+        text = ""
 
         # iterate over the list of dictionary terms
         for num, line in enumerate(data):  
@@ -32,7 +31,26 @@ def get_video_transcript(filename):
                 dict_data['vidlink'] = vid_link
             else:
                 # this is the transcript text
-                dict_data['text'].append(line)
+                # create one long string for dictionary insertion
+                text += " " + line
+        dict_data['text'] = text
+    
+    return dict_data
 
-        
-get_video_transcript('BBCE_transcripts/_2NtGS8HTc876.txt')
+# declare a client instance of the MongoDB PyMongo driver
+client = MongoClient('localhost', 27017)
+
+# # make sure the host settings are correct
+# # print("\nserver_info():", json.dumps(client.server_info(), indent=4))
+
+db = client["BBCE"]
+col = db["Transcripts"]
+
+directory = 'BBCE_transcripts'        
+# iterate through all documents and add them to the DB
+for filename in os.listdir(directory):
+    if filename.endswith(".txt"):
+        t_data = get_video_transcript(os.path.join(directory, filename))
+        result = col.insert_one(t_data)
+    else:
+        continue        

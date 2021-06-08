@@ -23,11 +23,11 @@ def get_video_transcript(filename):
         for num, line in enumerate(data):  
             if num==0 and line[:5]=="Title":
                 # this is the title
-                title = line[6:]
+                title = line[7:]
                 dict_data['title'] = title
             elif num==1 and line[:5]=="Video":
                 # this is the video link
-                vid_link = line[6:]
+                vid_link = line[7:]
                 dict_data['vidlink'] = vid_link
             else:
                 # this is the transcript text

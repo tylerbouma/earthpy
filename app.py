@@ -1,12 +1,14 @@
 from flask import Flask, request, jsonify, render_template
 import markdown
 import markdown.extensions.fenced_code
+from visualisation import read_mongo
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    df = read_mongo()
+    return render_template('index.html', tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 @app.route('/about')
 def about():

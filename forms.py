@@ -1,6 +1,7 @@
 from wtforms import Form, StringField, SelectField
 
 class TranscriptSearchForm(Form):
-    choices = [('title', 'title')]
+    choices = [('Title', 'Title'),
+               ('Text', 'Text')]
     select = SelectField('Search for transcripts:', choices=choices)
     search = StringField('')

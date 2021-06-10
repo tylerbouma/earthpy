@@ -3,6 +3,16 @@
 {% block content %}
 <h1>{%block title%} Welcome to EarthPy{%endblock%}</h1>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 {% from "_formhelpers.html" import render_field %}
 <form method="post">
   <dl>
@@ -12,10 +22,6 @@
   </p></dl>
   <p><input type="submit" value="Search">
 </p></form>
-
-<!-- {% for table in tables %}
-    {{ table|safe }}
-{% endfor %} -->
 
 {%endblock%}
 

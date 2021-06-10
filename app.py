@@ -1,35 +1,39 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, flash, redirect
 import markdown
 import markdown.extensions.fenced_code
 from visualisation import read_mongo
 from forms import TranscriptSearchForm
+import config
 
 app = Flask(__name__)
+app.secret_key = config.SECRET_KEY
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     search = TranscriptSearchForm(request.form)
+    print(search)
     if request.method == 'POST':
         return search_results(search)
     return render_template('index.html', form=search)
     #df = read_mongo('BBCE', 'Transcriptions', 'Tigers')
-    #return render_template('index.html', tables=[df.to_html(classes='data', index=False)])
+    #
 
 @app.route('/results')
 def search_results(search):
-    results = []
     search_string = search.data['search']
+    df = read_mongo('BBCE', 'Transcripts', search_string)
 
     if search.data['search'] == '':
-        qry = db_session.query(Title)
-        results = query.all()
-
-    if not results:
+        # returns dataframe with first 10 lines of the database
+        # df = read_mongo('BBCE', 'Transcripts')
+        return render_template('results.html', tables=[df.to_html(classes='data', index=False)])
+    if df.empty:
         flash('No results found!')
         return redirect('/')
     else:
+        # df = read_mongo('BBCE', 'Transcripts', search_string)
         # display results
-        return render_template('results.html', results=results)
+        return render_template('results.html', tables=[df.to_html(classes='data', index=False)])
 
 @app.route('/about')
 def about():

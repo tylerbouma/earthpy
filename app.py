@@ -21,7 +21,7 @@ def index():
 @app.route('/results')
 def search_results(search):
     search_string = search.data['search']
-    df = read_mongo('BBCE', 'Transcripts', search_string)
+    df = read_mongo('BBCE', 'Transcripts', str(search_string))
 
     if search.data['search'] == '':
         # returns dataframe with first 10 lines of the database

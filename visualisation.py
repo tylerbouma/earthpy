@@ -11,10 +11,7 @@ def read_mongo(db="BBCE", collection="Transcripts", query="", no_id=True):
     # col.create_index([("title", "text")])
     cur = col.find({ "$text": {"$search": query }}).limit(10)
 
-    if not list(cur):
-        return False
-    else:
-        df = pd.DataFrame(list(cur))
+    df = pd.DataFrame(list(cur))
 
     # delete the id
     # if no_id:

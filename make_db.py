@@ -1,8 +1,6 @@
 from pymongo import MongoClient, errors
 # pickle will serialize the dictionary
-import pickle
-import time, json
-import os
+import pickle, time, json, os
 
 start_time = time.time()
 

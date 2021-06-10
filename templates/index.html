@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{%block title%} Welcome to EarthPy API {%endblock%}</h1>
+<h1>{%block title%} Welcome to EarthPy{%endblock%}</h1>
 
-{% for table in tables %}
-    {{titles[loop.index]}}
+{% from "_formhelpers.html" import render_field %}
+<form method="post">
+  <dl>
+    {{ render_field(form.select) }}
+    <p>
+    {{ render_field(form.search) }}
+  </p></dl>
+  <p><input type="submit" value="Search">
+</p></form>
+
+<!-- {% for table in tables %}
     {{ table|safe }}
-{% endfor %}
+{% endfor %} -->
 
 {%endblock%}
+

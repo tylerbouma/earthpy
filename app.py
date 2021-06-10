@@ -2,13 +2,34 @@ from flask import Flask, request, jsonify, render_template
 import markdown
 import markdown.extensions.fenced_code
 from visualisation import read_mongo
+from forms import TranscriptSearchForm
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    df = read_mongo()
-    return render_template('index.html', tables=[df.to_html(classes='data')], titles=df.columns.values)
+    search = TranscriptSearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+    return render_template('index.html', form=search)
+    #df = read_mongo('BBCE', 'Transcriptions', 'Tigers')
+    #return render_template('index.html', tables=[df.to_html(classes='data', index=False)])
+
+@app.route('/results')
+def search_results(search):
+    results = []
+    search_string = search.data['search']
+
+    if search.data['search'] == '':
+        qry = db_session.query(Title)
+        results = query.all()
+
+    if not results:
+        flash('No results found!')
+        return redirect('/')
+    else:
+        # display results
+        return render_template('results.html', results=results)
 
 @app.route('/about')
 def about():

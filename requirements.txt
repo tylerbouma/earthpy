@@ -1,0 +1,8 @@
+Flask
+markdown
+apiclient
+youtube_transcript_api
+pymongo
+bson
+wtforms
+pandas
